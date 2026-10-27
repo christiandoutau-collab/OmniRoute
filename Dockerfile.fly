@@ -1,0 +1,6 @@
+# Image officielle déjà compilée : évite le build Next.js qui manque de mémoire sur Fly.
+FROM diegosouzapw/omniroute:latest
+USER root
+# Le volume Fly est monté en root : on donne le dossier de données à l'utilisateur node, puis on démarre en tant que node.
+ENTRYPOINT ["/bin/sh", "-c", "mkdir -p \"$DATA_DIR\" && chown -R node:node \"$DATA_DIR\" && exec setpriv --reuid=node --regid=node --init-groups /app/check-permissions.sh \"$@\"", "--"]
+CMD ["node", "dev/run-standalone.mjs"]
